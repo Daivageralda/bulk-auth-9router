@@ -10,20 +10,20 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #ffffff;
-            --surface: #f7f8fa;
-            --border: #e5e7eb;
-            --border-focus: #6366f1;
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
-            --accent: #4f46e5;
-            --accent-light: #eef2ff;
-            --success: #059669;
-            --success-bg: #ecfdf5;
-            --error: #dc2626;
-            --error-bg: #fef2f2;
-            --warning: #d97706;
+            --bg: #0f1117;
+            --surface: #161822;
+            --border: #2a2d3a;
+            --border-focus: #7aa2f7;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-muted: #565d6b;
+            --accent: #7aa2f7;
+            --accent-light: #1a1f35;
+            --success: #9ece6a;
+            --success-bg: #162214;
+            --error: #f7768e;
+            --error-bg: #261418;
+            --warning: #e0af68;
             --radius: 8px;
             --radius-sm: 6px;
         }
@@ -142,13 +142,13 @@
 
         .provider-btn:hover {
             color: var(--text-primary);
-            background: rgba(0,0,0,0.02);
+            background: rgba(255,255,255,0.04);
         }
 
         .provider-btn.active {
-            background: var(--bg);
+            background: var(--surface);
             color: var(--accent);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 0 0 1px var(--border);
         }
 
         .provider-btn.active small {
@@ -178,7 +178,7 @@
             font-family: inherit;
             font-size: 13px;
             color: var(--text-primary);
-            background: var(--bg);
+            background: var(--surface);
             transition: border-color 0.15s, box-shadow 0.15s;
             outline: none;
         }
@@ -193,7 +193,7 @@
 
         textarea:focus, input:focus {
             border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+            box-shadow: 0 0 0 3px rgba(122,162,247,0.15);
         }
 
         textarea::placeholder, input::placeholder {
@@ -225,7 +225,7 @@
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: #4338ca;
+            background: #5a8af2;
         }
 
         .btn-primary:disabled {
@@ -236,11 +236,11 @@
         .btn-danger {
             background: var(--error-bg);
             color: var(--error);
-            border: 1px solid #fecaca;
+            border: 1px solid #4a2028;
         }
 
         .btn-danger:hover {
-            background: #fee2e2;
+            background: #331a20;
         }
 
         /* ---- Alerts ---- */
@@ -257,13 +257,13 @@
         .alert-info {
             background: var(--accent-light);
             color: var(--accent);
-            border: 1px solid #c7d2fe;
+            border: 1px solid #2a3158;
         }
 
         .alert-error {
             background: var(--error-bg);
             color: var(--error);
-            border: 1px solid #fecaca;
+            border: 1px solid #4a2028;
         }
 
         /* ---- Status / Progress ---- */
@@ -315,12 +315,12 @@
 
         .result-item.success {
             background: var(--success-bg);
-            border: 1px solid #a7f3d0;
+            border: 1px solid #1e3a1e;
         }
 
         .result-item.error {
             background: var(--error-bg);
-            border: 1px solid #fecaca;
+            border: 1px solid #4a2028;
         }
 
         .result-name {
