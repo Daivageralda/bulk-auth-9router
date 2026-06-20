@@ -4,447 +4,511 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulk Auth 9Router</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #ffffff;
+            --surface: #f7f8fa;
+            --border: #e5e7eb;
+            --border-focus: #6366f1;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --accent: #4f46e5;
+            --accent-light: #eef2ff;
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+            --warning: #d97706;
+            --radius: 8px;
+            --radius-sm: 6px;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--surface);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
-        
+
         .container {
-            margin: 0 auto;
-            background: white;
+            width: 100%;
+            max-width: 1080px;
+            height: calc(100vh - 40px);
+            max-height: 680px;
+            background: var(--bg);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
-        
+
+        /* ---- Title Bar ---- */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
         }
-        
+
         .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
-        
+
         .header p {
-            opacity: 0.9;
-            font-size: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
         }
-        
+
+        /* ---- Main Content ---- */
         .content {
-            padding: 30px;
-        }
-        
-        .main-layout {
+            flex: 1;
+            padding: 20px 24px;
             display: flex;
             gap: 24px;
-            align-items: flex-start;
+            min-height: 0;
+            overflow: hidden;
         }
-        
-        .left-panel {
-            flex: 1;
-            min-width: 0;
+
+        .left-panel, .right-panel {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
         }
-        
-        .right-panel {
-            flex: 1;
-            min-width: 0;
-            position: sticky;
-            top: 20px;
-        }
-        
-        .section {
-            margin-bottom: 30px;
-        }
-        
+
+        .left-panel { flex: 1; min-width: 0; gap: 16px; }
+        .right-panel { flex: 1; min-width: 0; gap: 12px; }
+
+        /* ---- Sections ---- */
+        .section { flex-shrink: 0; }
+
         .section h2 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #333;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
-        
+
+        /* ---- Provider Segmented Control ---- */
         .provider-select {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 3px;
+            gap: 2px;
         }
-        
+
         .provider-btn {
             flex: 1;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            background: white;
+            padding: 7px 12px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 16px;
+            font-family: inherit;
+            font-size: 13px;
             font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
         }
-        
+
+        .provider-btn small {
+            font-size: 10px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
         .provider-btn:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
+            color: var(--text-primary);
+            background: rgba(0,0,0,0.02);
         }
-        
+
         .provider-btn.active {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
+            background: var(--bg);
+            color: var(--accent);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
-        
-        .form-group {
-            margin-bottom: 20px;
+
+        .provider-btn.active small {
+            color: var(--accent);
+            opacity: 0.7;
         }
-        
+
+        /* ---- Form ---- */
+        .form-group { margin-bottom: 12px; }
+        .form-group:last-child { margin-bottom: 0; }
+
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            font-size: 12px;
             font-weight: 500;
-            color: #555;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
         }
-        
-        .form-group small {
-            display: block;
-            color: #666;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-        
+
+        .form-group small { display: none; }
+
         textarea, input[type="password"] {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
             font-family: inherit;
-            font-size: 14px;
-        }
-        
-        textarea {
-            min-height: 150px;
-            resize: vertical;
-            font-family: 'Monaco', 'Courier New', monospace;
-        }
-        
-        textarea:focus, input:focus {
+            font-size: 13px;
+            color: var(--text-primary);
+            background: var(--bg);
+            transition: border-color 0.15s, box-shadow 0.15s;
             outline: none;
-            border-color: #667eea;
         }
-        
+
+        textarea {
+            height: 88px;
+            resize: none;
+            font-family: 'JetBrains Mono', 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        textarea:focus, input:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        textarea::placeholder, input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ---- Buttons ---- */
+        .actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
         .btn {
-            padding: 12px 24px;
+            padding: 8px 20px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.15s ease;
         }
-        
+
         .btn-primary {
-            background: #667eea;
-            color: white;
+            background: var(--accent);
+            color: #fff;
         }
-        
+
         .btn-primary:hover:not(:disabled) {
-            background: #5568d3;
+            background: #4338ca;
         }
-        
+
         .btn-primary:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
-        
+
         .btn-danger {
-            background: #ef4444;
-            color: white;
+            background: var(--error-bg);
+            color: var(--error);
+            border: 1px solid #fecaca;
         }
-        
+
         .btn-danger:hover {
-            background: #dc2626;
+            background: #fee2e2;
         }
-        
-        .status-box {
-            padding: 20px;
-            border-radius: 8px;
-            background: #f8f9ff;
-            border: 2px solid #e0e0e0;
+
+        /* ---- Alerts ---- */
+        .alert {
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            margin-bottom: 8px;
             display: none;
         }
-        
-        .status-box.active {
-            display: block;
+
+        .alert.active { display: block; }
+
+        .alert-info {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #c7d2fe;
         }
-        
+
+        .alert-error {
+            background: var(--error-bg);
+            color: var(--error);
+            border: 1px solid #fecaca;
+        }
+
+        /* ---- Status / Progress ---- */
+        .status-box {
+            display: none;
+            flex-shrink: 0;
+        }
+
+        .status-box.active { display: block; }
+
         .progress-bar {
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
+            height: 4px;
+            background: var(--surface);
+            border-radius: 2px;
             overflow: hidden;
-            margin-bottom: 15px;
+            margin-bottom: 6px;
         }
-        
+
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s;
+            background: var(--accent);
+            border-radius: 2px;
             width: 0%;
+            transition: width 0.4s ease;
         }
-        
+
         .status-text {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
-        
+
+        /* ---- Results List ---- */
         .results {
-            margin-top: 20px;
-            max-height: 400px;
+            flex: 1;
             overflow-y: auto;
+            min-height: 0;
+            padding-right: 4px;
         }
-        
-        .logs {
-            background: #1e1e1e;
-            border-radius: 8px;
-            padding: 12px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
-            color: #e0e0e0;
-            max-height: 75vh;
-            overflow-y: auto;
-        }
-        
-        .log-line {
-            margin-bottom: 4px;
-            white-space: pre-wrap;
-        }
-        
-        .log-info { color: #60a5fa; }
-        .log-success { color: #34d399; }
-        .log-error { color: #f87171; }
-        .log-warning { color: #fbbf24; }
-        
+
         .result-item {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 8px;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .result-item.success {
-            background: #d1fae5;
-            border: 1px solid #10b981;
-        }
-        
-        .result-item.error {
-            background: #fee2e2;
-            border: 1px solid #ef4444;
-        }
-        
-        .result-name {
-            font-weight: 500;
-        }
-        
-        .result-status {
-            font-size: 13px;
-            opacity: 0.8;
-        }
-        
-        .alert {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            display: none;
-        }
-        
-        .alert.active {
-            display: block;
-        }
-        
-        .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #ef4444;
-        }
-        
-        .alert-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border: 1px solid #3b82f6;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .log-panel-header {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .stats-cards {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            flex: 1;
-            padding: 16px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .stat-card .stat-number {
-            font-size: 28px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        
-        .stat-card .stat-label {
             font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            opacity: 0.8;
         }
-        
-        .stat-total {
-            background: #eff6ff;
-            color: #1d4ed8;
-            border: 1px solid #bfdbfe;
+
+        .result-item.success {
+            background: var(--success-bg);
+            border: 1px solid #a7f3d0;
         }
-        
-        .stat-success {
-            background: #f0fdf4;
-            color: #15803d;
-            border: 1px solid #bbf7d0;
-        }
-        
-        .stat-failed {
-            background: #fef2f2;
-            color: #b91c1c;
+
+        .result-item.error {
+            background: var(--error-bg);
             border: 1px solid #fecaca;
         }
-        
+
+        .result-name {
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .result-status {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* ---- Stats ---- */
+        .stats-cards {
+            display: flex;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .stat-card {
+            flex: 1;
+            padding: 10px 12px;
+            text-align: center;
+            background: var(--bg);
+        }
+
+        .stat-card .stat-number {
+            font-size: 22px;
+            font-weight: 600;
+            display: block;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .stat-total .stat-number { color: var(--text-primary); }
+        .stat-success .stat-number { color: var(--success); }
+        .stat-failed .stat-number { color: var(--error); }
+
+        /* ---- Log Console ---- */
+        .log-panel-header {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .logs {
+            flex: 1;
+            background: #1a1b26;
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            font-family: 'JetBrains Mono', 'Monaco', monospace;
+            font-size: 11px;
+            color: #a9b1d6;
+            overflow-y: auto;
+            line-height: 1.6;
+            min-height: 0;
+        }
+
+        .log-line {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .log-info { color: #7aa2f7; }
+        .log-success { color: #9ece6a; }
+        .log-error { color: #f7768e; }
+        .log-warning { color: #e0af68; }
+
+        /* ---- Scrollbar ---- */
+        .logs::-webkit-scrollbar,
+        .results::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .logs::-webkit-scrollbar-track,
+        .results::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .logs::-webkit-scrollbar-thumb {
+            background: #3b3d57;
+            border-radius: 2px;
+        }
+
+        .results::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* ---- Responsive ---- */
         @media (max-width: 768px) {
-            .main-layout {
-                flex-direction: column;
-            }
-            .right-panel {
-                position: static;
-            }
-            .logs {
-                max-height: 300px;
-            }
+            body { padding: 8px; height: auto; overflow: auto; }
+            .container { height: auto; max-height: none; }
+            .content { flex-direction: column; overflow: auto; }
+            .logs { max-height: 200px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Bulk Auth 9Router</h1>
-            <p>Unified authentication tool for Qoder and Kiro providers</p>
+            <h1>Bulk Auth 9Router</h1>
+            <p>Qoder &amp; Kiro account injector</p>
         </div>
         
         <div class="content">
-            <div class="main-layout">
-                <!-- LEFT: Form + Results -->
-                <div class="left-panel">
-                    <div class="section">
-                        <h2>1. Select Provider</h2>
-                        <div class="provider-select">
-                            <button class="provider-btn" data-provider="qoder">
-                                <div>🔧 Qoder</div>
-                                <small>Device Flow Authentication</small>
-                            </button>
-                            <button class="provider-btn" data-provider="kiro">
-                                <div>🎯 Kiro</div>
-                                <small>OAuth Flow Authentication</small>
-                            </button>
-                            <button class="provider-btn" data-provider="both">
-                                <div>🚀 Both</div>
-                                <small>Run Kiro → Qoder sequentially</small>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="section">
-                        <h2>2. Enter Account Details</h2>
-                        <div class="alert alert-info" id="info-alert">
-                            Select a provider first
-                        </div>
-                        <div class="alert alert-error" id="error-alert"></div>
-                        
-                        <div class="form-group">
-                            <label>Email Addresses:</label>
-                            <textarea id="emails-input" placeholder="Paste email addresses here (one per line)&#10;user1@example.com&#10;user2@example.com&#10;user3@example.com"></textarea>
-                            <small>Enter one email per line</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Shared Password:</label>
-                            <input type="password" id="password-input" placeholder="Enter password for all accounts">
-                            <small>This password will be used for all accounts above</small>
-                        </div>
-                    </div>
-                    
-                    <div class="section">
-                        <div class="actions">
-                            <button class="btn btn-primary" id="start-btn" disabled>Start Bulk Auth</button>
-                            <button class="btn btn-danger" id="stop-btn" style="display:none;">Stop</button>
-                        </div>
-                    </div>
-                    
-                    <div class="status-box" id="status-box">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill"></div>
-                        </div>
-                        <div class="status-text" id="status-text">Initializing...</div>
-                        <div class="results" id="results"></div>
+            <div class="left-panel">
+                <div class="section">
+                    <h2>Provider</h2>
+                    <div class="provider-select">
+                        <button class="provider-btn" data-provider="qoder">
+                            <span>Qoder</span>
+                            <small>Device Flow</small>
+                        </button>
+                        <button class="provider-btn" data-provider="kiro">
+                            <span>Kiro</span>
+                            <small>OAuth Flow</small>
+                        </button>
+                        <button class="provider-btn" data-provider="both">
+                            <span>Both</span>
+                            <small>Sequential</small>
+                        </button>
                     </div>
                 </div>
                 
-                <!-- RIGHT: Stats + Log Console -->
-                <div class="right-panel">
-                    <div class="stats-cards" id="stats-cards">
-                        <div class="stat-card stat-total">
-                            <span class="stat-number" id="stat-total">0</span>
-                            <span class="stat-label">Total</span>
-                        </div>
-                        <div class="stat-card stat-success">
-                            <span class="stat-number" id="stat-success">0</span>
-                            <span class="stat-label">Berhasil</span>
-                        </div>
-                        <div class="stat-card stat-failed">
-                            <span class="stat-number" id="stat-failed">0</span>
-                            <span class="stat-label">Gagal</span>
-                        </div>
+                <div class="section" style="flex:1; min-height:0; display:flex; flex-direction:column;">
+                    <div class="alert alert-info" id="info-alert">Select a provider first</div>
+                    <div class="alert alert-error" id="error-alert"></div>
+                    
+                    <div class="form-group">
+                        <label>Emails</label>
+                        <textarea id="emails-input" placeholder="user1@example.com&#10;user2@example.com&#10;user3@example.com"></textarea>
                     </div>
-                    <div class="log-panel-header">📋 Live Logs</div>
-                    <div class="logs" id="logs">
-                        <div class="log-line log-info">Waiting for bulk auth to start...</div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password-input" placeholder="Shared password for all accounts">
                     </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-primary" id="start-btn" disabled>Start Bulk Auth</button>
+                    <button class="btn btn-danger" id="stop-btn" style="display:none;">Stop</button>
+                </div>
+                
+                <div class="status-box" id="status-box">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="status-text" id="status-text">Initializing...</div>
+                </div>
+
+                <div class="results" id="results"></div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="stats-cards" id="stats-cards">
+                    <div class="stat-card stat-total">
+                        <span class="stat-number" id="stat-total">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-card stat-success">
+                        <span class="stat-number" id="stat-success">0</span>
+                        <span class="stat-label">Success</span>
+                    </div>
+                    <div class="stat-card stat-failed">
+                        <span class="stat-number" id="stat-failed">0</span>
+                        <span class="stat-label">Failed</span>
+                    </div>
+                </div>
+                <div class="log-panel-header">Live Logs</div>
+                <div class="logs" id="logs">
+                    <div class="log-line log-info">Waiting for bulk auth to start...</div>
                 </div>
             </div>
         </div>
