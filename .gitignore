@@ -1,0 +1,54 @@
+# ============================
+# Python
+# ============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ============================
+# Virtual Environment
+# ============================
+venv/
+.venv/
+env/
+
+# ============================
+# Secrets & Credentials
+# ============================
+.env
+accounts.json
+
+# ============================
+# Project Output
+# ============================
+results.json
+screenshots/*.png
+
+# ============================
+# IDE & Editor
+# ============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ============================
+# OS
+# ============================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ============================
+# Camoufox
+# ============================
+.camoufox/

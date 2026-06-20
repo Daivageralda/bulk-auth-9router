@@ -1,0 +1,3 @@
+"""
+Kiro authentication module
+"""
